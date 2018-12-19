@@ -30,6 +30,8 @@ class App extends PureComponent {
   }
 
   componentDidMount(){
+
+
     fetch('http://localhost:5002/api/db')
       .then(res => res.json())
       .then(exercise =>   this.setState({exercises : exercise, isloaded: true}))
