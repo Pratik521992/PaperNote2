@@ -22,22 +22,22 @@ export default props => {
                 <Typography style={{ color: 'inherit' }} variant="headline">Login to Proceed</Typography></CardHeader>
                                 <br />
                 <CardBody>
-                    <form onSubmit={props.click}>
+                    <form onSubmit={e => props.click(e)}>
                     <TextField
                             autoFocus
                             margin="dense"
-                            id="credetor"
+                            id="user"
                             label="Username"
                             type="text"
-                            onChange={props.change}
+                            onChange={e => props.change(e)}
                             fullWidth />
 
                         <TextField margin="dense"
                             id="Dollar"
-                            label="password"
+                            label="pass"
                             type="password"
                             fullWidth
-                            onChange={props.change} />
+                            onChange={e => props.change(e)} />
                             <br />
                             <CardFooter>
                             <br />

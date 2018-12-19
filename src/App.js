@@ -30,7 +30,7 @@ class App extends PureComponent {
   }
 
   componentDidMount(){
-    fetch('http://localhost:5002/api/db')
+    fetch('http://localhost:5004/api/db')
       .then(res => res.json())
       .then(exercise =>   this.setState({exercises : exercise, isloaded: true}))
   }
@@ -81,7 +81,7 @@ class App extends PureComponent {
     this.postItem(exercise);
   }
   postItem(exercise){
-    let url = 'http://localhost:5002/api/db/put';
+    let url = 'http://localhost:5004/api/db/put';
     const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
