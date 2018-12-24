@@ -1,4 +1,12 @@
 export const getjwt = () => {
-    console.log(localStorage.getItem('accessToken'))
-    return localStorage.getItem('accessToken');
+    
+    let toreturn = false;
+
+
+    if(sessionStorage.getItem('accessToken'))
+        toreturn =  true;
+    else
+        toreturn =  false;
+
+   return toreturn;     
 }

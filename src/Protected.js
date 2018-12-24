@@ -1,47 +1,17 @@
-import React,{Component} from 'react';
-import { getjwt } from './helper';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import App from  './App'
+ 
+export const Protected = () =>  {
 
-class AuthComp extends Component{
-
-    constructor(props){
-        super(props);
-        this.state={
-            user: undefined
+    let torender = '';
+    if(!localStorage.getItem('accessToken'))
+        {console.log('failure in Protected');
+        torender =  <Redirect to={{ pathname: "/" }}/>
         }
-    }
-    componentDidMount()  {
-        console.log('mounting')
-        const jwt = getjwt();
-        console.log(jwt)
-        
-        
-        axios.get('http://localhost:5002/api/post',{
-             headers: { Authorization: `Bearer ${jwt}`} 
-            })
-        .then(res => this.setState({
-            user: res.data.authData.realuser
-        }))
-        .catch(err => {
-            console.log(err)
-            console.log('invalid entry')
-            //localStorage.removeItem('accessToken');
-            this.props.history.push('/');
-    })
-    
+    else 
+        torender = <App />  
+    return (
+            <>{torender}</>
+    )
 }
-    render(){
-       console.log(this.state.user)
-        if(this.state.user === undefined){
-            return <div><h1>Loading....</h1></div>
-        }
-        return(
-            <>
-                {this.props.children}
-            </>
-
-        )
-    }
-}
-export default withRouter(AuthComp);

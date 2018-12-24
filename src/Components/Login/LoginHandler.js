@@ -1,48 +1,83 @@
-import React,{ Component} from 'react';
-import LoginPage from './loginPage';
-import axios from 'axios';
+    import React,{ Component} from 'react';
+    import LoginPage from './loginPage';
+    import { Redirect } from 'react-router-dom';
+    import axios from 'axios';
+    import Register from './Register'
 
-class Login extends Component{
-    
-    constructor(props){
-        super(props);
-        this.state = {
-            isauth : false,
-            user: '',
-            pass: ''
-        }
-        this.handleauthentication = this.handleauthentication.bind(this);
-        this.handlechange = this.handlechange.bind(this);
-    }
-    
-    handleauthentication(e){
 
-      e.preventDefault();
-        //axios here
-        axios.post('http://localhost:5002/api/login', {
-            user: this.state.user,
-            pass: this.state.pass
-        })
-        .then(res => localStorage.setItem('accessToken', res.data.token));
-        this.props.history.push('/Protected');
+    class Login extends Component{
         
-        console.log('Logging in ...')
-    }
-    handlechange(e){
-        console.log('entering...');
-        this.setState({
-            [e.target.id]: e.target.value
-        })
+        constructor(props){
+            super(props);
+            this.state = {
+                isauth : false,
+                user: '',
+                pass: '',
+                toregister: false
+            }
+            this.handleauthentication = this.handleauthentication.bind(this);
+        }
+        
+       handleauthentication(e){
 
-    }
-    render(){
-        return(
-            <>
-            <LoginPage click={this.handleauthentication} change={this.handlechange} />
-            </>
+        e.preventDefault();
+            //axios here
+            axios.post('http://localhost:5000/api/login', {
+             
+                user: this.state.user,
+                pass: this.state.pass},
+            )
+            .then(res => 
+                localStorage.setItem('accessToken', res.data.token),
+                this.setState({})
             
-        )
-    }
-}
+            ) 
+            window.location.reload()
+        }
+        handlechange=(e)=>{
+            console.log('entering...');
+            this.setState({
+                [e.target.id]: e.target.value
+            })
 
-export default Login;
+        }
+        HandleRegister=()=>{
+            this.setState({
+                toregister: true
+            })
+        }
+        handleback=(e)=>{
+            console.log('handling')
+            this.setState({
+                toregister: false
+            })
+        }
+        componentDidMount(){
+           
+            if( localStorage.getItem('accessToken')){
+            
+                        this.setState({
+                            isauth : true
+                        })
+              }
+              else{
+                 // alert('not Authenticated')
+              }
+        
+    
+        }
+        render(){
+            return(
+            <>
+                { this.state.isauth ? <Redirect to={{pathname: '/Protected' }}  /> : (
+                <LoginPage click={this.handleauthentication} change={this.handlechange} register={this.HandleRegister} />
+                )}
+               { this.state.toregister? <Register tologin={this.handleback} /> : <Redirect to={{pathname:'/'}} />
+                }
+              
+                </>
+            )
+    }
+    }
+
+    export default Login;
