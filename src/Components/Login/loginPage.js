@@ -33,11 +33,11 @@ export default props => {
                             fullWidth />
 
                         <TextField margin="dense"
-                            id="Dollar"
-                            label="pass"
+                            id="pass"
+                            label="password"
                             type="password"
                             fullWidth
-                            onChange={e => props.change(e)} />
+                            onChange={e=>props.change(e)} />
                             <br />
                             <CardFooter>
                             <br />
