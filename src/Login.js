@@ -1,26 +1,22 @@
-import React,{ Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
-import App from './App';
+import {Protected} from './Protected';
 import LoginHandler from './Components/Login/LoginHandler';
-import AuthComp from './Protected';
+import Register from '../src/Components/Login/Register';
 
-class Login extends Component{
-    
-   
-    render(){
-        return(
+function Login() {
+    return(
             <Router>
-                 <Switch>
-                        <Route path="/" exact component={LoginHandler} />
-                        <AuthComp>
-                            <Route path="/Protected" component={App} />
-                        </AuthComp>
-                 </Switch>
+                <Switch>
+                     <Route path="/" exact component={LoginHandler} />
+                      <Route path="/Protected" component={Protected} />
+                      <Route path="/Register" component={ Register } />
+                     
+                </Switch>
             </Router>
-            
-        )
-    }
-}
+            )
+        }
+
 
 export default Login;
