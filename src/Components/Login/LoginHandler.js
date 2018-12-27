@@ -2,7 +2,8 @@
     import LoginPage from './loginPage';
     import { Redirect } from 'react-router-dom';
     import axios from 'axios';
-    import Register from './Register'
+    import Register from './Register';
+    import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 
     class Login extends Component{
@@ -13,7 +14,8 @@
                 isauth : false,
                 user: '',
                 pass: '',
-                toregister: false
+                toregister: false,
+                showerror: ''
             }
             this.handleauthentication = this.handleauthentication.bind(this);
         }
@@ -31,8 +33,12 @@
                 localStorage.setItem('accessToken', res.data.token),
                 this.setState({})
             
-            ) 
-            window.location.reload()
+            )
+            setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            
+            
         }
         handlechange=(e)=>{
             console.log('entering...');
@@ -53,20 +59,28 @@
             })
         }
         componentDidMount(){
-           
-            if( localStorage.getItem('accessToken')){
+          
+              
+             if(localStorage.getItem('accessToken')==='not authenticated'){
+
+                this.setState({
+                    isauth: 'wrong'
+                })
+              }
+              
+              
+           else if( localStorage.getItem('accessToken')){
             
-                        this.setState({
-                            isauth : true
-                        })
-              }
-              else{
-                 // alert('not Authenticated')
-              }
-        
+            this.setState({
+                isauth : true
+            })
+  } 
     
         }
         render(){
+            let showerror = ''
+            if(this.state.isauth==='wrong')
+                showerror = <SnackbarContent variant="error"  message="This is an error message!"/>;
             return(
             <>
                 { this.state.isauth ? <Redirect to={{pathname: '/Protected' }}  /> : (
@@ -74,7 +88,7 @@
                 )}
                { this.state.toregister? <Register tologin={this.handleback} /> : <Redirect to={{pathname:'/'}} />
                 }
-              
+              {showerror}
                 </>
             )
     }
