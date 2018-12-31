@@ -3,8 +3,9 @@
     import { Redirect } from 'react-router-dom';
     import axios from 'axios';
     import Register from './Register';
-    import SnackbarContent from '@material-ui/core/SnackbarContent';
-
+ 
+  
+   
 
     class Login extends Component{
         
@@ -15,12 +16,13 @@
                 user: '',
                 pass: '',
                 toregister: false,
-                showerror: ''
+                showerror: '',
+                open:false
             }
-            this.handleauthentication = this.handleauthentication.bind(this);
+           
         }
         
-       handleauthentication(e){
+       handleauthentication=(e)=>{
 
         e.preventDefault();
             //axios here
@@ -29,15 +31,13 @@
                 user: this.state.user,
                 pass: this.state.pass},
             )
-            .then(res => 
-                localStorage.setItem('accessToken', res.data.token),
-                this.setState({})
-            
-            )
+             .then(res => ( (res.data.token===undefined)? localStorage.setItem('error', res.data.error):
+                            localStorage.setItem('accessToken', res.data.token)
+                             
+             ))
             setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            
+                window.location.reload()
+            }, 500);
             
         }
         handlechange=(e)=>{
@@ -59,37 +59,29 @@
             })
         }
         componentDidMount(){
-          
-              
-             if(localStorage.getItem('accessToken')==='not authenticated'){
-
-                this.setState({
-                    isauth: 'wrong'
-                })
-              }
-              
-              
-           else if( localStorage.getItem('accessToken')){
-            
-            this.setState({
-                isauth : true
-            })
-  } 
-    
+            console.log('before login');
+            if(localStorage.getItem('accessToken'))this.setState({isauth: true,open:false});
         }
+        handleclose=()=>{
+            this.setState({
+                open:false
+            })
+        }
+
         render(){
-            let showerror = ''
-            if(this.state.isauth==='wrong')
-                showerror = <SnackbarContent variant="error"  message="This is an error message!"/>;
+           
             return(
-            <>
-                { this.state.isauth ? <Redirect to={{pathname: '/Protected' }}  /> : (
+            <>  
+            
+            
+                { (this.state.isauth )? <Redirect to={{pathname: '/Protected' }}  /> : 
+
+                (!this.state.toregister)?    
                 <LoginPage click={this.handleauthentication} change={this.handlechange} register={this.HandleRegister} />
-                )}
-               { this.state.toregister? <Register tologin={this.handleback} /> : <Redirect to={{pathname:'/'}} />
+                :
+                <Register tologin={this.handleback} />
                 }
-              {showerror}
-                </>
+            </>
             )
     }
     }
