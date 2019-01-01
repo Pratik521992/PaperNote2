@@ -2,7 +2,8 @@
     import LoginPage from './loginPage';
     import { Redirect } from 'react-router-dom';
     import axios from 'axios';
-    import Register from './Register'
+    import Register from './Register';
+    import Snackbar from '@material-ui/core/Snackbar';
 
 
     class Login extends Component{
@@ -64,8 +65,11 @@
                         
                     }
 
-              else{
-                 // alert('not Authenticated')
+              else if (localStorage.getItem('error')){
+                 this.setState({
+                     showprompt:true,
+                     isauth : false
+                 })
               }
         
     
@@ -74,6 +78,7 @@
            
             return(
             <>
+                {this.state.showprompt? <Snackbar autoHideDuration={6000} variant="error" message='Invalid Credentials'/>:''}
                 { (this.state.isauth )? <Redirect to={{pathname: '/Protected' }}  /> : 
 
                 (!this.state.toregister)?    
@@ -81,7 +86,7 @@
                 :
                 <Register tologin={this.handleback} />
                 }
-                </>
+            </>
             )
     }
     }
