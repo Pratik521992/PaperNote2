@@ -3,8 +3,9 @@
     import { Redirect } from 'react-router-dom';
     import axios from 'axios';
     import Register from './Register';
-    import Snackbar from '@material-ui/core/Snackbar';
-
+ 
+  
+   
 
     class Login extends Component{
         
@@ -14,12 +15,14 @@
                 isauth : false,
                 user: '',
                 pass: '',
-                toregister: false
+                toregister: false,
+                showerror: '',
+                open:false
             }
-            this.handleauthentication = this.handleauthentication.bind(this);
+           
         }
         
-       handleauthentication(e){
+       handleauthentication=(e)=>{
 
         e.preventDefault();
             //axios here
@@ -28,13 +31,14 @@
                 user: this.state.user,
                 pass: this.state.pass},
             )
-             .then(res => 
-                localStorage.setItem('accessToken', res.data.token),
-                this.setState()
-            )
+             .then(res => ( (res.data.token===undefined)? localStorage.setItem('error', res.data.error):
+                            (localStorage.setItem('accessToken', res.data.token),
+                                localStorage.setItem('realUser', res.data.realUser.user))
+                             
+             ))
             setTimeout(() => {
                 window.location.reload()
-            }, 1000);
+            }, 500);
             
         }
         handlechange=(e)=>{
@@ -56,29 +60,24 @@
             })
         }
         componentDidMount(){
-           
-            if( localStorage.getItem('accessToken')){
-            
-                        this.setState({
-                            isauth : true
-                        })
-                        
-                    }
-
-              else if (localStorage.getItem('error')){
-                 this.setState({
-                     showprompt:true,
-                     isauth : false
-                 })
-              }
-        
-    
+            console.log('before login');
+            if(localStorage.getItem('accessToken'))this.setState({isauth: true,open:false});
+            else{
+                localStorage.clear()
+            }
         }
+        handleclose=()=>{
+            this.setState({
+                open:false
+            })
+        }
+
         render(){
            
             return(
-            <>
-                {this.state.showprompt? <Snackbar autoHideDuration={6000} variant="error" message='Invalid Credentials'/>:''}
+            <>  
+            
+            
                 { (this.state.isauth )? <Redirect to={{pathname: '/Protected' }}  /> : 
 
                 (!this.state.toregister)?    

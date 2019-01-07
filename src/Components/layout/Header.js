@@ -15,6 +15,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -59,6 +60,11 @@ const styles = theme => ({
   inputRoot: {
     color: 'inherit',
     width: '100%',
+  },
+  userName: {
+    color: 'inherit',
+    width: '80%',
+    marginTop: theme.spacing.unit * 1.2
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
@@ -105,7 +111,7 @@ class PrimarySearchAppBar extends React.Component {
     
   };
   logout=()=>{
-    localStorage.removeItem('accessToken');
+    localStorage.clear();
     this.setState({
       tologin: <Redirect to={{pathname:'/'}} />
     })
@@ -118,12 +124,20 @@ class PrimarySearchAppBar extends React.Component {
   handleMobileMenuClose = () => {
     this.setState({ mobileMoreAnchorEl: null });
   };
+  decodeToken(){
+    //console.log(localStorage.getItem('realUser').user)
+    return localStorage.getItem('realUser');
+    
+  }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    
+    let loggedInUser=localStorage.getItem('realUser') ? this.decodeToken() : 'N/A'
 
     const renderMenu = (
       <Menu
@@ -180,7 +194,10 @@ class PrimarySearchAppBar extends React.Component {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-             
+             <Typography className={classes.userName} variant="title">
+                Hello - 
+                {loggedInUser}
+             </Typography>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"

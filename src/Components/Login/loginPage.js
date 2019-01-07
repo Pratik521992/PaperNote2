@@ -5,6 +5,7 @@ import { Grid, Paper ,Typography } from '@material-ui/core';
 import CardHeader from '../Dependency/CardHeader';
 import CardBody from '../Dependency/CardBody';
 import image from '../../images/background.jpg';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 const styles = {
     paperContainer: {
@@ -13,7 +14,11 @@ const styles = {
         backgroundSize: "cover",
         height: "900px"
     },
-
+    error:{
+            backgroundColor: '#FF3D00',
+            fontSize:16
+        
+    },
     Paper: {
         padding: 20, margin: 50, minHeight: 500, display: 'block', marginLeft: 'auto', marginRight: 'auto', Width: 400
     },
@@ -50,13 +55,11 @@ export default props => {
                 <Typography   style={{fontFamily:'serif', color:'#FAFAFA',padding:20, margin: 20}} variant='display4'>PaperNote</Typography>
                 <Typography style={styles.desc} variant='subheading'>Powered by ValueLabs</Typography>
                 <p style={styles.desc}>
-                Don't be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco   
               </p>
                </Grid>
                 <Paper style={styles.Paper}>
-
+                { localStorage.getItem('error')?<SnackbarContent message='Invalid Cedentials' style={styles.error} />:''}
                     <CardHeader color="primary" style={{ marginTop: 80 }}>
                         <Typography style={{ color: 'inherit' }} variant="headline">Login to Proceed</Typography></CardHeader>
                     <br />

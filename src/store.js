@@ -1,5 +1,5 @@
 export const muscles = [
-  'Technology', 'Fashion', 'Design', 'Food','others'
+  'WebMD', 'Neilson', 'SnapFish', 'GroupO','United Airlines'
 ]
 
 export const exercises = [
